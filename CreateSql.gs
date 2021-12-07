@@ -131,7 +131,7 @@ function tableCreate(sql){
       }
 
       //次のレコードへの追加事項
-      if(i < getTableInfo.length - 1){
+      if(j < getTableInfo.length - 1){
         sql += ",";
       }
       sql += "\n";
