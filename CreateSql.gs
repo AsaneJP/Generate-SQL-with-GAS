@@ -6,8 +6,8 @@ function CreateSql() {
     //現在あるシートを全て取得
     const sheets = spreadsheet.getSheets();
     let sheetFlag = true;
-    for(let i = 0 ; i < sheets.length ; i ++){
-      if(sheets[i].getName() == "exportSQL"){
+    for(let n = 0 ; n < sheets.length ; n ++){
+      if(sheets[n].getName() == "exportSQL"){
         sheetFlag = false;
       }
     }
@@ -26,7 +26,7 @@ function CreateSql() {
     sheet.getRange(1, 1).setValue(sql);
     //SQLファイルの移動
     sheet.activate();
-    spreadsheet.moveActiveSheet(3);
+    spreadsheet.moveActiveSheet(2);
   }
 }
 
@@ -49,9 +49,9 @@ function tableCreate(sql){
   let getTableName = sheet.getRange(3,1,sheet.getLastRow(),2).getValues();
 
   //空白行の削除
-  for(let i = 0 ; i < getTableName.length ; i++){
-    if(getTableName[i][0] == "" || getTableName[i][0] == null){
-      getTableName.splice(i);
+  for(let n = 0 ; n < getTableName.length ; n++){
+    if(getTableName[n][0] == "" || getTableName[n][0] == null){
+      getTableName.splice(n);
     }
   }
   console.log(getTableName);
@@ -70,63 +70,63 @@ function tableCreate(sql){
     let getTableInfo = sheet.getRange(2,1,sheet.getLastRow(),9).getValues();
 
     //空白行の削除
-    for(let i = 0 ; i < getTableInfo.length ; i++){
-      if(getTableInfo[i][0] == "" || getTableInfo[i][0] == null || getTableInfo[i][1] == "" || getTableInfo[i][1] == null){
-        getTableInfo.splice(i);
+    for(let n = 0 ; n < getTableInfo.length ; n++){
+      if(getTableInfo[n][0] == "" || getTableInfo[n][0] == null || getTableInfo[n][1] == "" || getTableInfo[n][1] == null){
+        getTableInfo.splice(n);
       }
     }
     console.log(getTableInfo);
-    for(let i = 0 ; i < getTableInfo.length ; i++){
+    for(let j = 0 ; j < getTableInfo.length ; j++){
       //カラム名入力
-      sql += `  \`${getTableInfo[i][0]}\``;
+      sql += `  \`${getTableInfo[j][0]}\``;
       
       //データ型入力
-      sql += ` ${getTableInfo[i][1]}`;
+      sql += ` ${getTableInfo[j][1]}`;
       
       //データサイズの入力
-      if(getTableInfo[i][2] != ""){
-        sql += `(${getTableInfo[i][2]})`;
+      if(getTableInfo[j][2] != ""){
+        sql += `(${getTableInfo[j][2]})`;
       }
 
       //デフォルトの入力
-      if(getTableInfo[i][3] != ""){
-        if(getTableInfo[i][3] == "NULL"){
+      if(getTableInfo[j][3] != ""){
+        if(getTableInfo[j][3] == "NULL"){
           sql += " DEFAULT NULL";
-        }else if(getTableInfo[i][3] == "current_timestamp"){
+        }else if(getTableInfo[j][3] == "current_timestamp"){
           sql += " DEFAULT current_timestamp()";
         }else{
-          sql += ` DEFAULT ${getTableInfo[i][3]}`;
+          sql += ` DEFAULT ${getTableInfo[j][3]}`;
         }
-      }else if(!getTableInfo[i][5]){
+      }else if(!getTableInfo[j][5]){
         sql += " NOT NULL";
       }
 
-      if(getTableInfo[i][4] != ""){
-        if(getTableInfo[i][4] == "ON UPDATE CURRENT_TIMESTAMP"){
+      if(getTableInfo[j][4] != ""){
+        if(getTableInfo[j][4] == "ON UPDATE CURRENT_TIMESTAMP"){
           sql += " ON UPDATE current_timestamp()";
         }
       }
 
       //コメント入力
-      if(getTableInfo[i][6] != ""){
-        sql += ` COMMENT '${getTableInfo[i][6]}'`;
+      if(getTableInfo[j][6] != ""){
+        sql += ` COMMENT '${getTableInfo[j][6]}'`;
       }
 
       //ALTER TABLE
-      if(getTableInfo[i][7] != ""){
+      if(getTableInfo[j][7] != ""){
         addSql += "\n";
         addSql += "-- インデックスの追加\n";
-        if(getTableInfo[i][7] == "primary"){
+        if(getTableInfo[j][7] == "primary"){
           addSql += `ALTER TABLE \`${getTableName[i][0]}\`\n`;
-          addSql += `  ADD PRIMARY KEY (\`${getTableInfo[i][0]}\`);\n`;
+          addSql += `  ADD PRIMARY KEY (\`${getTableInfo[j][0]}\`);\n`;
         }
       }
-      if(getTableInfo[i][8] != ""){
+      if(getTableInfo[j][8] != ""){
         addSql += "\n";
         addSql += "-- オートインクリメントの追加\n";
-        if(getTableInfo[i][8]){
+        if(getTableInfo[j][8]){
           addSql += `ALTER TABLE \`${getTableName[i][0]}\`\n`;
-          addSql += `  MODIFY \`${getTableInfo[i][0]}\` ${getTableInfo[i][1]}(${getTableInfo[i][2]}) NOT NULL AUTO_INCREMENT;\n`;
+          addSql += `  MODIFY \`${getTableInfo[j][0]}\` ${getTableInfo[j][1]}(${getTableInfo[j][2]}) NOT NULL AUTO_INCREMENT;\n`;
         }
       }
 
@@ -152,7 +152,3 @@ function tableCreate(sql){
 
   return sql ;
 }
-
-
-
-

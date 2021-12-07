@@ -8,9 +8,9 @@ function CreateTable() {
     let getTableName = sheet.getRange(3,1,sheet.getLastRow()).getValues();
     
     //空白行の削除
-    for(let i = 0 ; i < getTableName.length ; i++){
-      if(getTableName[i][0] == "" || getTableName[i][0] == null){
-        getTableName.splice(i);
+    for(let n = 0 ; n < getTableName.length ; n++){
+      if(getTableName[n][0] == "" || getTableName[n][0] == null){
+        getTableName.splice(n);
       }
     }
     
