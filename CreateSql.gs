@@ -109,7 +109,7 @@ function tableCreate(sql){
 
       //コメント入力
       if(getTableInfo[i][6] != ""){
-        sql += ` COMMENT='${getTableInfo[i][6]}'`;
+        sql += ` COMMENT '${getTableInfo[i][6]}'`;
       }
 
       //ALTER TABLE
